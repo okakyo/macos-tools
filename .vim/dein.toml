@@ -62,16 +62,14 @@ hook_add = '''
 '''
 
 [[plugins]]
-repo = 'scrooloose/nerdtree'
-on_cmd = ['NERDTreeToggle']
-depends = ['nerdtree-syntax-highlight', 'nerdtree-git-plugin']
-hook_add = '''
-  let NERDTreeShowHidden=1
-    nnoremap <silent><C-a> :NERDTreeFind<CR>:vertical res 30<CR>
-'''
+repo = 'Shougo/defx.nvim'
 
 [[plugins]]
-repo = 'tiagofumo/vim-nerdtree-syntax-highlight'
+repo = 'roxma/nvim-yarp'
+
+[[plugins]]
+repo = 'roxma/vim-hug-neovim-rpc'
+
 
 [[plugins]]
 repo = 'Xuyuanp/nerdtree-git-plugin'

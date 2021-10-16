@@ -1,4 +1,7 @@
 set fenc =utf-8
+
+syntax on
+
 set nobackup
 set noswapfile
 set autoread
@@ -44,10 +47,6 @@ set guioptions-=m
 set guioptions+=R
 
 nmap <Esc><Esc> :nohlsearch<CR><Esc>
-
-
-syntax enable
-syntax on
 
 " auto reload .vimrc
 augroup source-vimrc
@@ -134,18 +133,6 @@ if len(s:removed_plugins) > 0
   call dein#recache_runtimepath()
 endif
 
-" NERDTree についての設定一覧
-
-"NERDTree のブックマークを初期表示
-let g:NERDTreeShowBookmarks=1
-let g:NERDTreeLimitedSyntax = 1
-
-	
-autocmd vimenter * NERDTree
-
-" Ctrl + N で:NERDTreeToggle をキーバインドする
-map <C-n> :NERDTreeToggle<CR>
-
 let g:airline_theme = 'wombat'               " テーマの指定
 let g:airline#extensions#tabline#enabled = 1 " タブラインを表示
 let g:airline_powerline_fonts = 1            " Powerline Fontsを利用
@@ -158,7 +145,6 @@ let g:preview_markdown_vertical = 1
 let g:preview_markdown_auto_update = 1
 
 " 以下、lsp を行うための設定
-
 
 function! s:on_lsp_buffer_enabled() abort
     setlocal omnifunc=lsp#complete
@@ -278,5 +264,93 @@ if executable('vls')
     au FileType vue nnoremap <buffer><silent> <F1> :<C-u>LspImplementation<CR>
     au FileType vue nnoremap <buffer><silent> <F2> :<C-u>LspRename<CR>
   augroup end
-endif
+endi
+
+" Defx (ファイラー)の設定
+autocmd FileType defx call s:defx_my_settings()
+
+function! s:defx_my_settings() abort
+  nnoremap <silent><buffer><expr> <CR>
+   \ defx#do_action('drop')
+  nnoremap <silent><buffer><expr> c
+  \ defx#do_action('copy')
+  nnoremap <silent><buffer><expr> m
+  \ defx#do_action('move')
+  nnoremap <silent><buffer><expr> p
+  \ defx#do_action('paste')
+  nnoremap <silent><buffer><expr> l
+  \ defx#do_action('drop')
+  nnoremap <silent><buffer><expr> t
+  \ defx#do_action('open','tabnew')
+  nnoremap <silent><buffer><expr> E
+  \ defx#do_action('drop', 'vsplit')
+  nnoremap <silent><buffer><expr> P
+  \ defx#do_action('drop', 'pedit')
+  nnoremap <silent><buffer><expr> o
+  \ defx#do_action('open_or_close_tree')
+  nnoremap <silent><buffer><expr> K
+  \ defx#do_action('new_directory')
+  nnoremap <silent><buffer><expr> N
+  \ defx#do_action('new_file')
+  nnoremap <silent><buffer><expr> M
+  \ defx#do_action('new_multiple_files')
+  nnoremap <silent><buffer><expr> C
+  \ defx#do_action('toggle_columns',
+  \                'mark:indent:icon:filename:type:size:time')
+  nnoremap <silent><buffer><expr> S
+  \ defx#do_action('toggle_sort', 'time')
+  nnoremap <silent><buffer><expr> d
+  \ defx#do_action('remove')
+  nnoremap <silent><buffer><expr> r
+  \ defx#do_action('rename')
+  nnoremap <silent><buffer><expr> !
+  \ defx#do_action('execute_command')
+  nnoremap <silent><buffer><expr> x
+  \ defx#do_action('execute_system')
+  nnoremap <silent><buffer><expr> yy
+  \ defx#do_action('yank_path')
+  nnoremap <silent><buffer><expr> .
+  \ defx#do_action('toggle_ignored_files')
+  nnoremap <silent><buffer><expr> ;
+  \ defx#do_action('repeat')
+  nnoremap <silent><buffer><expr> h
+  \ defx#do_action('cd', ['..'])
+  nnoremap <silent><buffer><expr> ~
+  \ defx#do_action('cd')
+  nnoremap <silent><buffer><expr> q
+  \ defx#do_action('quit')
+  nnoremap <silent><buffer><expr> <Space>
+  \ defx#do_action('toggle_select') . 'j'
+  nnoremap <silent><buffer><expr> *
+  \ defx#do_action('toggle_select_all')
+  nnoremap <silent><buffer><expr> j
+  \ line('.') == line('$') ? 'gg' : 'j'
+  nnoremap <silent><buffer><expr> k
+  \ line('.') == 1 ? 'G' : 'k'
+  nnoremap <silent><buffer><expr> <C-l>
+  \ defx#do_action('redraw')
+  nnoremap <silent><buffer><expr> <C-g>
+  \ defx#do_action('print')
+  nnoremap <silent><buffer><expr> cd
+  \ defx#do_action('change_vim_cwd')
+endfunction
+
+autocmd VimEnter * execute 'Defx'
+nnoremap <silent> <C-n> :<C-u> Defx <CR>
+
+call defx#custom#option('_', {
+      \ 'winwidth': 40,
+      \ 'split': 'vertical',
+      \ 'direction': 'topleft',
+      \ 'show_ignored_files': 1,
+      \ 'buffer_name': 'exlorer',
+      \ 'toggle': 1,
+      \ 'resume': 1,
+      \ })
+
+autocmd BufWritePost * call defx#redraw()
+autocmd BufEnter * call defx#redraw()
+
+
+
 
