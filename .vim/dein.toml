@@ -1,5 +1,6 @@
 [[plugins]]
-repo = 'Townk/vim-autoclose'
+repo = 'alvan/vim-closetag'
+
 
 [[plugins]]
 repo = 'joshdick/onedark.vim'
@@ -62,14 +63,7 @@ hook_add = '''
 '''
 
 [[plugins]]
-repo = 'Shougo/defx.nvim'
-
-[[plugins]]
-repo = 'roxma/nvim-yarp'
-
-[[plugins]]
-repo = 'roxma/vim-hug-neovim-rpc'
-
+repo='preservim/nerdtree'
 
 [[plugins]]
 repo = 'Xuyuanp/nerdtree-git-plugin'
@@ -94,6 +88,8 @@ hook_add = '''
 
 [[plugins]]
 repo = 'neoclide/coc.nvim'
-if = '''executable('node') && executable('yarn')'''
-build = './install.sh nightly'
-merged = '0'
+merge = 0
+rev = "release"
+
+[[plugins]]
+repo='mattn/vim-sonictemplate'

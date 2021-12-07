@@ -1,7 +1,5 @@
 set fenc =utf-8
 
-syntax on
-
 set nobackup
 set noswapfile
 set autoread
@@ -18,6 +16,7 @@ set showmatch
 set laststatus=2
 set backspace=2
 set wildmode=list:longest
+set expandtab
 
 set mouse=a
 
@@ -31,9 +30,9 @@ set whichwrap=b,s,h,l,<,>,[,],~
 set list
 set listchars=tab:»-,trail:-,eol:↲,extends:»,precedes:«,nbsp:%
 
-set shiftwidth=4
-set softtabstop=4
-set tabstop=4
+set shiftwidth=2
+set softtabstop=2
+set tabstop=2
 
 set ignorecase 
 set smartcase 
@@ -137,220 +136,74 @@ let g:airline_theme = 'wombat'               " テーマの指定
 let g:airline#extensions#tabline#enabled = 1 " タブラインを表示
 let g:airline_powerline_fonts = 1            " Powerline Fontsを利用
 
+" vim/closing-tag についての設定
+
+let g:cloasetag_filenames = '*.html,*.xhtml,*.jsx,*.tsx,*.erb,*.vue'
+let g:closetag_emptyTags_caseSensitive = 1
+let g:closetag_shortcut = '>'
+let g:closetag_close_shortcut = '<leader>>'
+
+let g:closetag_regions = {
+    \ 'typescript.tsx': 'jsxRegion,tsxRegion',
+    \ 'javascript.jsx': 'jsxRegion',
+    \ 'typescriptreact': 'jsxRegion,tsxRegion',
+    \ 'javascriptreact': 'jsxRegion',
+    \ }
+
+let g:closetag_filenames = '*.html,*.xhtml,*.jsx,*.tsx,*.vue'
+let g:closetag_xhtml_filenames = '*.xml,*.xhtml,*.jsx,*.tsx,*.vue'
+let g:closetag_filetypes = 'html,xhtml,js,ts,jsx,tsx,vue'
+let g:closetag_xhtml_filetypes = 'xml,xhtml,js,ts,jsx,tsx,vue'
+
+let g:closetag_emptyTags_caseSensitive = 1
+
+let g:closetag_regions = {
+    \ 'typescript.tsx': 'jsxRegion,tsxRegion',
+    \ 'javascript.jsx': 'jsxRegion',
+    \ 'typescriptreact': 'jsxRegion,tsxRegion',
+    \ 'javascriptreact': 'jsxRegion',
+    \ }
+"
+let g:closetag_shortcut = '>'
+let g:closetag_close_shortcut = '<leader>>'
+
 "Vim/cheatsheetについてのファイル指定
+
 let g:cheatsheet#cheat_file = '~/.vim/.cheatsheet.md'
 
 let g:preview_markdown_parser='mdcat'
 let g:preview_markdown_vertical = 1
 let g:preview_markdown_auto_update = 1
 
-" 以下、lsp を行うための設定
+" ------COC の設定 -----
+command! -nargs=0 Prettier :CocCommand prettier.formatFile
+let g:coc_global_extensions = [
+  \ 'coc-snippets',
+  \ 'coc-pairs',
+  \ 'coc-html',
+  \ 'coc-css',
+  \ 'coc-tsserver',
+  \ 'coc-prettier',
+  \ 'coc-eslint',
+  \ 'coc-vetur',
+  \ 'coc-json',
+  \ 'coc-vimtex',
+  \ 'coc-python'
+  \ ]
 
-function! s:on_lsp_buffer_enabled() abort
-    setlocal omnifunc=lsp#complete
-    setlocal signcolumn=yes
-    if exists('+tagfunc') | setlocal tagfunc=lsp#tagfunc | endif
-    nmap <buffer> gd <plug>(lsp-definition)
-    nmap <buffer> gs <plug>(lsp-document-symbol-search)
-    nmap <buffer> gS <plug>(lsp-workspace-symbol-search)
-    nmap <buffer> gr <plug>(lsp-references)
-    nmap <buffer> gi <plug>(lsp-implementation)
-    nmap <buffer> gt <plug>(lsp-type-definition)
-    nmap <buffer> <leader>rn <plug>(lsp-rename)
-    nmap <buffer> [g <plug>(lsp-previous-diagnostic)
-    nmap <buffer> ]g <plug>(lsp-next-diagnostic)
-    nmap <buffer> K <plug>(lsp-hover)
-    inoremap <buffer> <expr><c-f> lsp#scroll(+4)
-    inoremap <buffer> <expr><c-d> lsp#scroll(-4)
+" coc-pairs の設定
+inoremap <silent><expr> <cr> pumvisible() ? coc#_select_confirm() : "\<C-g>u\<CR>\<c-r>=coc#on_enter()\<CR>"
 
-    let g:lsp_format_sync_timeout = 1000
-    autocmd! BufWritePre *.rs,*.go call execute('LspDocumentFormatSync')
-    
-    " refer to doc to add more commands
-endfunction
+" NERDTree の設定
 
-augroup lsp_install
-    au!
-    " call s:on_lsp_buffer_enabled only for languages that has the server registered.
-    autocmd User lsp_buffer_enabled call s:on_lsp_buffer_enabled()
-augroup END
-" Golang でのLSP の設定
+" Start NERDTree and put the cursor back in the other window.
+autocmd VimEnter * NERDTree | wincmd p
 
-command! LspDebug let lsp_log_verbose=1 | let lsp_log_file = expand('~/lsp.log')
+nnoremap <leader>n :NERDTreeFocus<CR>
+nnoremap <C-n> :NERDTree<CR>
+nnoremap <C-t> :NERDTreeToggle<CR>
+nnoremap <C-f> :NERDTreeFind<CR>
 
-let g:lsp_diagnostics_enabled = 1
-let g:lsp_diagnostics_echo_cursor = 1
-" let g:asyncomplete_auto_popup = 1
-" let g:asyncomplete_auto_completeopt = 0
-let g:asyncomplete_popup_delay = 200
-let g:lsp_text_edit_enabled = 1
-let g:lsp_preview_float = 1
-let g:lsp_diagnostics_float_cursor = 1
-let g:lsp_settings_filetype_go = ['gopls', 'golangci-lint-langserver']
-
-let g:lsp_settings = {}
-let g:lsp_settings['gopls'] = {
-  \  'workspace_config': {
-  \    'usePlaceholders': v:true,
-  \    'analyses': {
-  \      'fillstruct': v:true,
-  \    },
-  \  },
-  \  'initialization_options': {
-  \    'usePlaceholders': v:true,
-  \    'analyses': {
-  \      'fillstruct': v:true,
-  \    },
-  \  },
-  \}
-
-" For snippets
-let g:UltiSnipsExpandTrigger="<tab>"
-let g:UltiSnipsJumpForwardTrigger="<tab>"
-let g:UltiSnipsJumpBackwardTrigger="<s-tab>"
-
-set completeopt+=menuone
-
-" Python での LSP の設定
-
-if executable('pyls')
-    " pip install python-language-server
-    au User lsp_setup call lsp#register_server({
-        \ 'name': 'pyls',
-        \ 'cmd': {server_info->['pyls']},
-        \ 'allowlist': ['python'],
-        \ })
-endif
-
-" TypeScript での LSP 設定
-
-if executable('typescript-language-server')
-    au User lsp_setup call lsp#register_server({
-        \ 'name': 'typescript-language-server',
-        \ 'cmd': {server_info->[&shell, &shellcmdflag, 'typescript-language-server --stdio']},
-        \ 'root_uri':{server_info->lsp#utils#path_to_uri(lsp#utils#find_nearest_parent_file_directory(lsp#utils#get_buffer_path(), 'tsconfig.json'))},
-        \ 'whitelist': ['typescript', 'typescript.tsx', 'typescriptreact'],
-        \ })
-endif
-
-" Vue 
-if executable('vls')
-  augroup LspVls
-    au!
-    au User lsp_setup call lsp#register_server({
-        \ 'name': 'vue-language-server',
-        \ 'cmd': {server_info->['vls']},
-        \ 'whitelist': ['vue'],
-        \ 'initialization_options': {
-        \         'config': {
-        \             'html': {},
-        \              'vetur': {
-        \                  'validation': {}
-        \              }
-        \         }
-        \     }
-        \ })
-
-    " omnifunc
-    au FileType vue setlocal omnifunc=lsp#complete
-    " map
-    au FileType vue nnoremap <buffer><silent> gd :<C-u>LspDefinition<CR>
-    au FileType vue nnoremap <buffer><silent> gD :<C-u>LspReferences<CR>
-    au FileType vue nnoremap <buffer><silent> gs :<C-u>LspDocumentSymbol<CR>
-    au FileType vue nnoremap <buffer><silent> gS :<C-u>LspWorkspaceSymbol<CR>
-    au FileType vue nnoremap <buffer><silent> gQ :<C-u>LspDocumentFormat<CR>
-    au FileType vue vnoremap <buffer><silent> gQ :LspDocumentRangeFormat<CR>
-    au FileType vue nnoremap <buffer><silent> K :<C-u>LspHover<CR>
-    au FileType vue nnoremap <buffer><silent> <F1> :<C-u>LspImplementation<CR>
-    au FileType vue nnoremap <buffer><silent> <F2> :<C-u>LspRename<CR>
-  augroup end
-endi
-
-" Defx (ファイラー)の設定
-autocmd FileType defx call s:defx_my_settings()
-
-function! s:defx_my_settings() abort
-  nnoremap <silent><buffer><expr> <CR>
-   \ defx#do_action('drop')
-  nnoremap <silent><buffer><expr> c
-  \ defx#do_action('copy')
-  nnoremap <silent><buffer><expr> m
-  \ defx#do_action('move')
-  nnoremap <silent><buffer><expr> p
-  \ defx#do_action('paste')
-  nnoremap <silent><buffer><expr> l
-  \ defx#do_action('drop')
-  nnoremap <silent><buffer><expr> t
-  \ defx#do_action('open','tabnew')
-  nnoremap <silent><buffer><expr> E
-  \ defx#do_action('drop', 'vsplit')
-  nnoremap <silent><buffer><expr> P
-  \ defx#do_action('drop', 'pedit')
-  nnoremap <silent><buffer><expr> o
-  \ defx#do_action('open_or_close_tree')
-  nnoremap <silent><buffer><expr> K
-  \ defx#do_action('new_directory')
-  nnoremap <silent><buffer><expr> N
-  \ defx#do_action('new_file')
-  nnoremap <silent><buffer><expr> M
-  \ defx#do_action('new_multiple_files')
-  nnoremap <silent><buffer><expr> C
-  \ defx#do_action('toggle_columns',
-  \                'mark:indent:icon:filename:type:size:time')
-  nnoremap <silent><buffer><expr> S
-  \ defx#do_action('toggle_sort', 'time')
-  nnoremap <silent><buffer><expr> d
-  \ defx#do_action('remove')
-  nnoremap <silent><buffer><expr> r
-  \ defx#do_action('rename')
-  nnoremap <silent><buffer><expr> !
-  \ defx#do_action('execute_command')
-  nnoremap <silent><buffer><expr> x
-  \ defx#do_action('execute_system')
-  nnoremap <silent><buffer><expr> yy
-  \ defx#do_action('yank_path')
-  nnoremap <silent><buffer><expr> .
-  \ defx#do_action('toggle_ignored_files')
-  nnoremap <silent><buffer><expr> ;
-  \ defx#do_action('repeat')
-  nnoremap <silent><buffer><expr> h
-  \ defx#do_action('cd', ['..'])
-  nnoremap <silent><buffer><expr> ~
-  \ defx#do_action('cd')
-  nnoremap <silent><buffer><expr> q
-  \ defx#do_action('quit')
-  nnoremap <silent><buffer><expr> <Space>
-  \ defx#do_action('toggle_select') . 'j'
-  nnoremap <silent><buffer><expr> *
-  \ defx#do_action('toggle_select_all')
-  nnoremap <silent><buffer><expr> j
-  \ line('.') == line('$') ? 'gg' : 'j'
-  nnoremap <silent><buffer><expr> k
-  \ line('.') == 1 ? 'G' : 'k'
-  nnoremap <silent><buffer><expr> <C-l>
-  \ defx#do_action('redraw')
-  nnoremap <silent><buffer><expr> <C-g>
-  \ defx#do_action('print')
-  nnoremap <silent><buffer><expr> cd
-  \ defx#do_action('change_vim_cwd')
-endfunction
-
-autocmd VimEnter * execute 'Defx'
-nnoremap <silent> <C-n> :<C-u> Defx <CR>
-
-call defx#custom#option('_', {
-      \ 'winwidth': 40,
-      \ 'split': 'vertical',
-      \ 'direction': 'topleft',
-      \ 'show_ignored_files': 1,
-      \ 'buffer_name': 'exlorer',
-      \ 'toggle': 1,
-      \ 'resume': 1,
-      \ })
-
-autocmd BufWritePost * call defx#redraw()
-autocmd BufEnter * call defx#redraw()
-
-
-
+syntax enable
+syntax on
 
