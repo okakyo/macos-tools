@@ -7,6 +7,8 @@ set hidden
 set showcmd
 
 set number
+set relativenumber
+
 set ruler
 set title
 set cursorline
