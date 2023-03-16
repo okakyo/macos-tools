@@ -2,18 +2,18 @@ vim.cmd[[packadd packer.nvim onedark.vim]]
 
 require("packer").startup(function(use)
   use 'wbthomason/packer.nvim'
-  use 'neovim/nvim-lspconfig'
-  use 'williamboman/nvim-lsp-installer'
+  use {'neovim/nvim-lspconfig',
+       'williamboman/mason.nvim',
+       'williamboman/mason-lspconfig.nvim'
+     }
   use 'vim-airline/vim-airline'
   use 'vim-airline/vim-airline-themes'
   use 'tpope/vim-fugitive'
   use 'airblade/vim-gitgutter'
   use 'navarasu/onedark.nvim'
-  use 'glepnir/dashboard-nvim'
   use 'rstacruz/vim-closer'
   use 'dense-analysis/ale'
   use 'lambdalisue/nerdfont.vim'
-
   use 'lambdalisue/fern-renderer-nerdfont.vim'
   use {
     'nvim-treesitter/nvim-treesitter',
@@ -33,6 +33,24 @@ require("packer").startup(function(use)
   use "hrsh7th/cmp-cmdline"
   use "hrsh7th/cmp-nvim-lsp"
   use "hrsh7th/vim-vsnip"
-
-end)
+  use {
+	"windwp/nvim-autopairs",
+    config = function() require("nvim-autopairs").setup {} end
+  }
+  use {"akinsho/toggleterm.nvim", tag = '*', config = function()
+    require("toggleterm").setup()
+    end
+  }
+  use {
+    'glepnir/dashboard-nvim',
+    event = 'VimEnter',
+    config = function()
+      require('dashboard').setup {
+        -- config
+      }
+    end,
+    requires = {'nvim-tree/nvim-web-devicons'}
+  }
+  end
+)
 
