@@ -16,8 +16,7 @@
   "coc.preferences.formatOnType": true,
   "languageserver": {
     "terraform": {
-      "command": "terraform-ls",
-      "args": ["serve"],
+      "command": "terraform-lsp",
       "filetypes": ["terraform", "tf"],
       "initializationOptions": {},
       "settings": {}

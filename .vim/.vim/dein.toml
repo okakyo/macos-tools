@@ -93,3 +93,6 @@ rev = "release"
 
 [[plugins]]
 repo='mattn/vim-sonictemplate'
+
+[[plugins]]
+repo='glepnir/dashboard-nvim'
