@@ -113,13 +113,6 @@ vim.lsp.handlers["textDocument/signatureHelp"] = vim.lsp.with(
     })
   })
 
-  -- Set up lspconfig.
-  local capabilities = require('cmp_nvim_lsp').default_capabilities()
-  -- Replace <YOUR_LSP_SERVER> with each lsp server you've enabled.
-  require('lspconfig').pylsp.setup {
-    capabilities = capabilities
-  }
-
 -- colorscheme -----------------------------------------------------------------
 require('onedark').setup  {
   style = 'deep'
@@ -146,12 +139,11 @@ vim.cmd 'highlight GitGutterDeleteLine       ctermbg=1'
 -- 'junegunn/fzf.vim' ----------------------------------------------------------
 vim.cmd "let g:fzf_preview_window = ['right:70%', 'ctrl-/']"
 
--- fern.vim----------------------------------------------------------------
+-- fern.vim----------------------------------------------------------------------
 vim.cmd "let g:fern#renderer = 'nerdfont'"
 
 require 'config'
 require 'plugins'
 require 'keybindings'
 require 'treesitter'
-require 'nvim-tree'
-require 'dashboard-config'
+

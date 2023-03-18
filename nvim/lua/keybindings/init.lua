@@ -17,8 +17,6 @@ vim.api.nvim_set_keymap('t', '<C-W>l', '<CMD>wincmd l<CR>', {silent=true})
 
 -- 'nvim-telescope/telescope.nvim' ----------------------------------------------------------
 
--- 今回追加分
-
 vim.keymap.set('n', 'fb', '<cmd>lua require("telescope.builtin").file_browser()<cr>',{noremap = true})
 vim.keymap.set('n', 'ff', '<cmd>lua require("telescope.builtin").find_files()<cr>',{noremap = true})
 vim.keymap.set('n', 'fg', '<cmd>lua require("telescope.builtin").find_grep()<cr>',{noremap = true})
@@ -34,3 +32,5 @@ vim.api.nvim_set_keymap('n', '<leader>GD', ':<C-u>vert Gdiffsplit !~1', {noremap
 -- lambdalisue/fern.vim ---------------------------------------------------------
 vim.api.nvim_set_keymap('n', '<C-n>', ':Fern . -reveal=% -drawer -toggle -width=40<CR>',{noremap = true})
 
+--  ToggleTerm -------------------------------------------------------------------
+vim.api.nvim_set_keymap('n', 'tt', ':ToggleTerm <CR>',{noremap = true})
